@@ -78,3 +78,30 @@ def fastest_connection_to_not_visited(visited, flights, result):
                     fastest_flight = temp
     # returning the fastest flights to a non-visited city
     return fastest_flight
+
+
+def init_result(start_city, start_datetime, flights):
+    # adding the beginning city as a visited city:
+    visited_cities = set()
+    visited_cities.add(start_city)
+
+    results_df = pd.DataFrame(columns=['city', 'start_datetime', 'end_datetime', 'previous_city', 'cost'])
+    # all_cities = sorted(flights['Departure city'].unique())
+    all_cities = get_all_cities(flights)
+    for city in all_cities:
+        if city == start_city:
+            dict_flight = {'city': city, "start_datetime": start_datetime, "end_datetime": start_datetime,
+                           "previous_city": start_city, "cost": 0}
+            new_row = pd.DataFrame([dict_flight])
+        else:
+            # 2030-11-01 09:00:00 as "infinity"
+            dict_flight = {'city': city, "start_datetime": "2030-11-01 09:00:00", "end_datetime": "2030-11-01 09:00:00",
+                           "previous_city": "empty", "cost": 99999}
+            new_row = pd.DataFrame([dict_flight])
+
+        results_df = pd.concat([results_df, new_row], ignore_index=True)
+
+    results_df['start_datetime'] = pd.to_datetime(results_df['start_datetime'])
+    results_df['end_datetime'] = pd.to_datetime(results_df['end_datetime'])
+
+    return results_df, visited_cities
