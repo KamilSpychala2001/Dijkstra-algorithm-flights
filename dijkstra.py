@@ -45,3 +45,36 @@ def get_all_cities(flights):
     return sorted(all_cities)
     # return sorted(flights['Departure city'].unique())
     # return sorted(flights[['Departure city', 'Arrival city']].unique())
+
+
+def fastest_connection_to_not_visited(visited, flights, result):
+    visited_list = list(visited)
+
+    # initializing with big data
+    fastest_flight_datetime = datetime(2033, 3, 1, 9, 30, 00)
+    fastest_flight = None
+
+    for visited_city in visited_list:
+
+        # getting the time in which we will be in the city
+        current_datetime_in_city = get_datetime_in_city(visited_city, result)
+        possible_destination_from_city = get_cities_to_which_we_can_fly(visited_city, flights)
+
+        for destination_city in possible_destination_from_city:
+            # checking if the city is visited
+            if destination_city in visited_list:
+                # if it is already visited then continue
+                continue
+            else:
+                temp = fastest_connection_between_cities(visited_city, destination_city, current_datetime_in_city, flights)
+
+                # if no connection is found then continue, could happen in the "late" range
+                if temp is None:
+                    continue
+
+                # faster flight
+                if temp['Departure datetime'] < fastest_flight_datetime:
+                    fastest_flight_datetime = temp['Departure datetime']
+                    fastest_flight = temp
+    # returning the fastest flights to a non-visited city
+    return fastest_flight
