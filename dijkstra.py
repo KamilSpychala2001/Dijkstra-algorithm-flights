@@ -105,3 +105,11 @@ def init_result(start_city, start_datetime, flights):
     results_df['end_datetime'] = pd.to_datetime(results_df['end_datetime'])
 
     return results_df, visited_cities
+
+
+def end_criterion(all_cities):
+    set_cities = set(all_cities)
+    if set_cities == visited_cities:
+        return True
+    else:
+        return False
