@@ -23,3 +23,13 @@ def preprocess_flights(flights):
 def get_cities_to_which_we_can_fly(dep_city, flights):
     cities = set(flights['Arrival city'][flights["Departure city"] == dep_city])
     return sorted(cities)
+
+
+def fastest_connection_between_cities(dep_city, arr_city, datetime_start, flights):
+    connection = flights[(flights["Departure city"] == dep_city) & (flights["Arrival city"] == arr_city) & (
+            flights['Departure datetime'] >= datetime_start)]
+    if connection.empty:
+        print("No connection")
+        return None
+    final_df = connection.sort_values(by=['Departure datetime'], ascending=True)
+    return final_df.iloc[0]
