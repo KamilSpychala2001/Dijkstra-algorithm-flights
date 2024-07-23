@@ -18,3 +18,8 @@ def preprocess_flights(flights):
 
     flights = flights.drop(['Departure date', 'Departure time', 'Arrival date', 'Arrival time'], axis=1)
     return flights
+
+
+def get_cities_to_which_we_can_fly(dep_city, flights):
+    cities = set(flights['Arrival city'][flights["Departure city"] == dep_city])
+    return sorted(cities)
