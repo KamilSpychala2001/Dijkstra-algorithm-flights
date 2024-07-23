@@ -33,3 +33,8 @@ def fastest_connection_between_cities(dep_city, arr_city, datetime_start, flight
         return None
     final_df = connection.sort_values(by=['Departure datetime'], ascending=True)
     return final_df.iloc[0]
+
+
+def get_datetime_in_city(city, result):
+    city_data = result[result['city'] == city]
+    return city_data['end_datetime'].iloc[0]
