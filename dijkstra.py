@@ -38,3 +38,10 @@ def fastest_connection_between_cities(dep_city, arr_city, datetime_start, flight
 def get_datetime_in_city(city, result):
     city_data = result[result['city'] == city]
     return city_data['end_datetime'].iloc[0]
+
+
+def get_all_cities(flights):
+    all_cities = pd.unique(flights[['Departure city', 'Arrival city']].values.ravel())
+    return sorted(all_cities)
+    # return sorted(flights['Departure city'].unique())
+    # return sorted(flights[['Departure city', 'Arrival city']].unique())
