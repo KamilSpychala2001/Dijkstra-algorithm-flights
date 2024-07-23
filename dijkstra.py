@@ -66,7 +66,8 @@ def fastest_connection_to_not_visited(visited, flights, result):
                 # if it is already visited then continue
                 continue
             else:
-                temp = fastest_connection_between_cities(visited_city, destination_city, current_datetime_in_city, flights)
+                temp = fastest_connection_between_cities(visited_city, destination_city, current_datetime_in_city,
+                                                         flights)
 
                 # if no connection is found then continue, could happen in the "late" range
                 if temp is None:
@@ -113,3 +114,38 @@ def end_criterion(all_cities):
         return True
     else:
         return False
+
+
+def dijstra_algorithm(visited_cities, flights, result):
+    checker_if_not_too_much = 0
+    all_cities = get_all_cities(flights)
+
+    while not end_criterion(all_cities):
+
+        if checker_if_not_too_much > 20:
+            print("MORE THAN 20")
+            break
+
+        if end_criterion(all_cities):
+            break
+
+        new_city = fastest_connection_to_not_visited(visited_cities, flights, result)
+        if new_city is None:
+            print('No new flight available')
+            print(result)
+            break
+
+        new_city_to = new_city['Arrival city']
+        new_city_departure_datetime = new_city['Departure datetime']
+
+        line = result.loc[result['city'] == new_city_to]
+        if new_city_departure_datetime < line['start_datetime'].iloc[0]:
+            result.loc[
+                result['city'] == new_city_to, ['start_datetime', 'end_datetime', 'previous_city', 'cost']] = [
+                new_city['Departure datetime'], new_city['Arrival datetime'], new_city['Departure city'],
+                new_city['Ticket cost']]
+            visited_cities.add(new_city_to)
+
+        checker_if_not_too_much += 1
+
+    return result
