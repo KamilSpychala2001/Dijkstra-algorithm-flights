@@ -149,3 +149,11 @@ def dijstra_algorithm(visited_cities, flights, result):
         checker_if_not_too_much += 1
 
     return result
+
+
+flights = preprocess_flights(flights)
+city_beginning = "Bangkok"
+
+result, visited_cities = init_result(city_beginning, "2023-11-01 09:00:00", flights)
+end_result = dijstra_algorithm(visited_cities, flights, result)
+print(end_result)
